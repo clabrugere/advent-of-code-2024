@@ -34,7 +34,7 @@ fn part1(input: &str) -> i32 {
 fn part2(input: &str) -> i32 {
     let (ids1, ids2) = parse_input(input);
 
-    let mut freqs_ids2: HashMap<i32, usize> = HashMap::new();
+    let mut freqs_ids2: HashMap<i32, i32> = HashMap::new();
     ids2.iter().for_each(|&id| {
         freqs_ids2
             .entry(id)
@@ -42,11 +42,9 @@ fn part2(input: &str) -> i32 {
             .or_insert(1);
     });
 
-    ids1.iter().fold(0, |acc, val| {
-        if let Some(&freq) = freqs_ids2.get(val) {
-            return acc + val * (freq as i32);
-        }
-        acc
+    ids1.iter().fold(0, |acc, val| match freqs_ids2.get(val) {
+        Some(freq) => acc + val * freq,
+        None => acc,
     })
 }
 
